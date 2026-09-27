@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuentas por Pagar - Gestor Financiero</title>
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/1_base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/2_layout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/3_components.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/4_forms_tables.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/5_pages.css') }}">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Menú Principal</h2>
+            </div>
+            <nav class="sidebar-nav">
+                 <ul>
+        {% if current_user.rol in ['admin', 'jefe'] %}
+        <li>
+            <a href="{{ url_for('usuarios_page') }}" class="{{ 'active' if request.path == '/usuarios' else '' }}">
+                <i class="fas fa-users-cog"></i><span>Usuarios</span>
+            </a>
+        </li>
+        {% endif %}
+        
+        {% if current_user.rol != 'admin' %}
+        <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i><span>Inicio</span></a></li>
+        <li><a href="{{ url_for('registro') }}"><i class="fas fa-exchange-alt"></i><span>Registro</span></a></li>
+        <li><a href="{{ url_for('reportes') }}"><i class="fas fa-chart-bar"></i><span>Reportes</span></a></li>
+        <li><a href="{{ url_for('cuentas') }}"><i class="fas fa-file-invoice-dollar"></i><span>Cuentas</span></a></li>
+        {% endif %}
+    </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button id="menu-toggle"><i class="fas fa-bars"></i></button>
+                    <div class="header-title">
+                        <h1>Módulo de Cuentas por Pagar</h1>
+                        <p>Administra los créditos y deudas con tus proveedores.</p>
+                    </div>
+                </div>
+                
+                <div class="user-menu-container">
+                    <div class="user-trigger" onclick="toggleUserMenu()">
+                        <div class="header-logo">
+                            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo de la Franquicia">
+                        </div>
+                        <span style="margin-left:10px; font-weight:bold; color:var(--marron-oscuro); cursor: pointer;">
+                            {{ current_user.nombre if current_user.is_authenticated else 'Usuario' }} 
+                            <i class="fas fa-caret-down"></i>
+                        </span>
+                    </div>
+                    <div id="user-dropdown" class="user-dropdown-content">
+                        <a href="{{ url_for('perfil') }}"><i class="fas fa-user-cog"></i> Configurar Usuario</a>
+                        <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </header>
+
+            <section class="content-area">
+                <div class="form-container">
+                    <h3>Agregar Nueva Cuenta por Pagar</h3>
+                    <form id="cuentas-form">
+                        <div class="form-group">
+                            <label for="proveedor">Nombre del Proveedor</label>
+                            <input type="text" id="proveedor" name="proveedor" placeholder="Ej: Carnicería" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha-credito">Fecha compra</label>
+                            <input type="date" id="fecha-credito" name="fecha-credito" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha-limite">Fecha Límite de Pago (Opcional)</label>
+                            <input type="date" id="fecha-limite" name="fecha-limite" style="border: 1px solid var(--naranja-quemado);">
+                        </div>
+                        <div class="form-group">
+                            <label for="monto-solicitado">Monto ($)</label>
+                            <input type="number" id="monto-solicitado" name="monto-solicitado" min="0.01" step="0.01" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Agregar Cuenta</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="filters-container">
+                    <div class="form-group">
+                        <label for="fecha-inicio-cuentas">Fecha de Inicio</label>
+                        <input type="date" id="fecha-inicio-cuentas">
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha-fin-cuentas">Fecha de Fin</label>
+                        <input type="date" id="fecha-fin-cuentas">
+                    </div>
+                    <div class="form-group">
+                        <label for="buscador-cuentas">Buscar por Proveedor</label>
+                        <input type="text" id="buscador-cuentas" placeholder="Escribe para filtrar...">
+                    </div>
+                    <div class="form-actions">
+                        <button id="btn-export-pdf-cuentas" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Exportar PDF</button>
+                        <button id="btn-export-excel-cuentas" class="btn btn-secondary"><i class="fas fa-file-excel"></i> Exportar Excel</button>
+                    </div>
+                </div>
+
+                <div class="total-display-container">
+                    <h3><span id="total-saldo-label-top">Saldo Pendiente Total (Filtrado):</span> <span id="total-saldo-top">$0.00</span></h3>
+                </div>
+
+                <div class="report-results">
+                    <h2>Estado Actual de Pagos</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha Crédito</th>
+                                    <th>Proveedor</th>
+                                    <th>Vencimiento</th> 
+                                    <th>Monto Total</th>
+                                    <th>Saldo Pendiente</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuentas-table-body">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="total-display-container">
+                    <h3><span id="total-saldo-label-bottom">Saldo Pendiente Total (Filtrado):</span> <span id="total-saldo-bottom">$0.00</span></h3>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <div id="abonar-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="close-abonar-modal">&times;</span>
+            <h2>Realizar Abono</h2>
+            <p>Proveedor: <strong id="abonar-proveedor-nombre"></strong></p>
+            <form id="abonar-form">
+                <input type="hidden" id="abonar-cuenta-id">
+                <div class="form-group">
+                    <label for="monto-abono">Monto a Abonar</label>
+                    <input type="number" id="monto-abono" placeholder="0.01" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="abonar-metodo">Pagar con:</label>
+                    <select id="abonar-metodo" required>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjeta">Tarjeta/Banco</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i> Confirmar Abono</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="pagar-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content small-modal">
+            <span class="modal-close" id="close-pagar-modal">&times;</span>
+            <h2>Confirmar Pago Total</h2>
+            <p>¿Estás seguro de que quieres saldar esta cuenta con "<strong id="pagar-proveedor-nombre"></strong>"?</p>
+             <p>Esto registrará un egreso por el saldo pendiente.</p>
+            <form id="pagar-form">
+                 <input type="hidden" id="pagar-cuenta-id">
+                 <div class="form-group">
+                    <label for="pagar-metodo">Pagar con:</label>
+                    <select id="pagar-metodo" required>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjeta">Tarjeta/Banco</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancelar-pago" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" id="confirmar-pago" class="btn btn-pagado-confirm">Sí, Saldar Cuenta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="eliminar-cuenta-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content small-modal">
+            <span class="modal-close" id="close-eliminar-cuenta-modal">&times;</span>
+            <h2>Eliminar Cuenta por Pagar</h2>
+            <p>¿Estás seguro de que deseas eliminar esta cuenta de <strong id="eliminar-proveedor-nombre"></strong>?</p>
+            <p style="color: #c0392b; font-size: 0.9em; margin-top: 10px; background: #ffebee; padding: 10px; border-radius: 5px;">
+                <i class="fas fa-exclamation-triangle"></i> <strong>Atención:</strong> Al eliminar esta cuenta, <b>todos los abonos asociados se eliminarán automáticamente</b> de tus reportes financieros para mantener los saldos correctos.
+            </p>
+            <div class="form-actions">
+                <button id="cancelar-eliminar-cuenta" class="btn btn-secondary">Cancelar</button>
+                <button id="confirmar-eliminar-cuenta" class="btn btn-eliminar-confirm"><i class="fas fa-trash"></i> Sí, Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editar-cuenta-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content small-modal">
+            <span class="modal-close" id="close-editar-cuenta-modal">&times;</span>
+            <h2>Modificar Cuenta</h2>
+            <form id="editar-cuenta-form">
+                <input type="hidden" id="edit-cuenta-id">
+                <div class="form-group">
+                    <label for="edit-cuenta-proveedor">Proveedor</label>
+                    <input type="text" id="edit-cuenta-proveedor" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-cuenta-fecha">Fecha de Compra</label>
+                    <input type="date" id="edit-cuenta-fecha" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-cuenta-limite">Fecha Límite (Opcional)</label>
+                    <input type="date" id="edit-cuenta-limite" style="border: 1px solid var(--naranja-quemado);">
+                </div>
+                <div class="form-group">
+                    <label for="edit-cuenta-monto">Monto Total de la Deuda ($)</label>
+                    <input type="number" id="edit-cuenta-monto" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="historial-abonos-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 700px;">
+            <span class="modal-close" id="close-historial-modal">&times;</span>
+            <h2><i class="fas fa-history"></i> Historial de Abonos</h2>
+            <p>Proveedor: <strong id="hist-proveedor-nombre"></strong></p>
+            
+            <div style="display: flex; justify-content: space-between; background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--naranja-principal);">
+                <div style="text-align: center;"><span>Total Deuda:</span> <strong id="hist-total" style="color: #333; display:block; font-size:1.2em;">$0.00</strong></div>
+                <div style="text-align: center;"><span>Total Abonado:</span> <strong id="hist-abonado" style="color: #333; display:block; font-size:1.2em;">$0.00</strong></div>
+                <div style="text-align: center;"><span>Pendiente:</span> <strong id="hist-pendiente" style="color: #333; display:block; font-size:1.2em;">$0.00</strong></div>
+            </div>
+
+            <div class="table-container" style="max-height: 300px; overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Monto</th>
+                            <th>Método</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historial-abonos-body">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="editar-abono-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content small-modal">
+            <span class="modal-close" id="close-editar-abono-modal">&times;</span>
+            <h2>Editar Abono</h2>
+            <form id="editar-abono-form">
+                <input type="hidden" id="edit-abono-id">
+                <input type="hidden" id="edit-abono-cuenta-id">
+                <input type="hidden" id="edit-abono-concepto">
+                <input type="hidden" id="hist-proveedor-temp">
+                <div class="form-group">
+                    <label for="edit-abono-fecha">Fecha del Abono</label>
+                    <input type="date" id="edit-abono-fecha" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-abono-monto">Monto Abonado ($)</label>
+                    <input type="number" id="edit-abono-monto" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-abono-metodo">Método de Pago</label>
+                    <select id="edit-abono-metodo" required>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjeta">Tarjeta/Banco</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='menu.js') }}"></script>
+    <script src="{{ url_for('static', filename='cuentas.js') }}"></script>
+</body>
+</html>

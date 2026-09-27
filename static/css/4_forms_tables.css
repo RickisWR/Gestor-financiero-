@@ -1,0 +1,307 @@
+/* --- INICIO DE MODIFICACIÓN: MENÚ FLOTANTE ESTILO "MODAL" --- */
+
+/* 1. Contenedor relativo dentro de la celda Concepto */
+.concepto-interactivo {
+    position: relative;
+    display: inline-block;
+}
+
+/* 2. Texto del concepto (Estilo interactivo mejorado) */
+.concepto-texto {
+    cursor: pointer;
+    font-weight: 600; /* Un poco más negrita, como los títulos */
+    color: #4e342e; /* Marrón oscuro */
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+/* Efecto al pasar el mouse sobre el texto del concepto */
+.concepto-texto:hover {
+    background-color: #fff8e1; /* Fondo amarillo muy suave */
+    color: #f57f17; /* Naranja/Dorado al hover */
+    text-decoration: none;
+}
+
+/* Icono de flechita pequeña al lado del texto */
+.concepto-texto i {
+    font-size: 0.8em;
+    margin-left: 6px;
+    opacity: 0.6;
+    transition: transform 0.2s;
+}
+
+.concepto-texto:hover i {
+    transform: rotate(180deg); /* Pequeña animación de la flecha */
+}
+
+/* 3. El Menú Desplegable (DISEÑO TIPO MODAL) */
+.menu-flotante {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    margin-top: 8px; /* Espacio separador */
+    
+    /* -- Estética Visual -- */
+    background-color: #faf9f6; /* Fondo Crema (Off-white) */
+    min-width: 190px;
+    border-radius: 12px; /* Bordes muy redondeados */
+    box-shadow: 0 10px 25px rgba(62, 39, 35, 0.15); /* Sombra cálida */
+    border: 1px solid #e0dace; /* Borde beige sutil */
+    z-index: 9999;
+    overflow: hidden;
+    
+    /* Animación de entrada */
+    animation: menuFadeIn 0.2s ease-out;
+}
+
+/* Clase que activa JavaScript para mostrar el menú */
+.menu-flotante.mostrar {
+    display: block;
+}
+
+/* 4. Estilos de los enlaces (Opciones) */
+.menu-flotante a {
+    display: flex;
+    align-items: center;
+    padding: 12px 18px;
+    text-decoration: none;
+    color: #5d4037; /* Texto Marrón (Tierra) */
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-bottom: 1px solid #efebe0; /* Línea divisoria muy sutil */
+    transition: all 0.2s ease;
+}
+
+/* Quitar borde al último elemento */
+.menu-flotante a:last-child {
+    border-bottom: none;
+}
+
+/* 5. Efectos Hover (Estilo botón amarillo) */
+.menu-flotante a:hover {
+    background-color: #ffecb3; /* Amarillo suave (Fondo al pasar el mouse) */
+    color: #3e2723; /* Marrón más intenso */
+    padding-left: 24px; /* Desplazamiento dinámico */
+}
+
+/* 6. Iconos dentro del menú */
+.menu-flotante a i {
+    margin-right: 12px;
+    font-size: 1.1em;
+    width: 20px;
+    text-align: center;
+    color: #fbc02d; /* Dorado base */
+    transition: color 0.2s;
+}
+
+.menu-flotante a:hover i {
+    color: #e65100; /* Naranja quemado al hover */
+}
+
+/* Animación suave */
+@keyframes menuFadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- FIN DE MODIFICACIÓN --- */
+
+
+/* ----- Formularios Generales ----- */
+.form-container { 
+    background-color: var(--crema-suave); padding: 30px; border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05); margin-bottom: 40px; 
+}
+.form-container h3 { 
+    margin-bottom: 20px; border-left: 4px solid var(--naranja-quemado); padding-left: 10px; 
+}
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+.form-group input, .form-group select, .form-group textarea { 
+    width: 100%; padding: 12px; border: 1px solid var(--gris-plateado); 
+    border-radius: 5px; background-color: #fff; font-size: 1em; 
+}
+.form-actions { margin-top: 20px; text-align: right; }
+
+/* ----- Contenedor de Filtros ----- */
+.filters-container { 
+    display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap; 
+    background-color: var(--crema-suave); padding: 20px; border-radius: 8px; margin-bottom: 40px; 
+}
+.filters-container .form-actions { margin-top: 0; margin-bottom: 0; }
+.filters-container .btn { padding: 12px 20px; }
+
+/* ----- Filtro Multi-selección Checkbox ----- */
+.multi-select-filter .checkbox-group { 
+    display: flex; flex-wrap: wrap; gap: 15px; background-color: #fff; 
+    padding: 10px 15px; border: 1px solid var(--gris-plateado); border-radius: 5px; 
+}
+.multi-select-filter .checkbox-group label { 
+    display: flex; align-items: center; cursor: pointer; 
+    margin-bottom: 0; font-weight: normal; 
+}
+.multi-select-filter .checkbox-group input[type="checkbox"] { margin-right: 8px; width: auto; }
+
+/* ----- Contenedor de Tablas ----- */
+.report-results h2 { margin-bottom: 20px; }
+
+/* CRUCIAL PARA MÓVIL: Permite scroll horizontal */
+.table-container { 
+    width: 100%; 
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+    border: 1px solid #ddd; /* Borde sutil para indicar límites */
+    border-radius: 8px;
+}
+
+table { 
+    width: 100%; border-collapse: collapse; background-color: #fff; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05); 
+    min-width: 600px; /* Fuerza un ancho mínimo para que no se aplaste en móvil */
+}
+th, td { 
+    padding: 12px 15px; text-align: left; 
+    border-bottom: 1px solid var(--beige-claro); vertical-align: middle; 
+    white-space: nowrap; /* Evita que el texto se parta en líneas extrañas */
+}
+thead { background-color: var(--marron-oscuro); color: var(--blanco-texto); }
+thead th { position: sticky; top: 0; z-index: 1; }
+
+/* ----- Estilos Específicos de Tablas ----- */
+
+/* Cuentas por Pagar */
+.status-pendiente { color: var(--naranja-quemado); font-weight: bold; }
+.status-pagado { color: var(--verde-oliva); font-weight: bold; }
+.search-container { margin-bottom: 20px; max-width: 400px; }
+
+/* Reportes (Flujo) */
+#reportes-flujo-table td.monto-ingreso,
+#reportes-flujo-table td.monto-egreso,
+#reportes-flujo-table td.monto-efectivo,
+#reportes-flujo-table td.monto-banco,
+#reportes-flujo-table td.acumulado {
+    text-align: right; 
+    font-weight: 500;
+    min-width: 100px; 
+}
+#reportes-flujo-table td.monto-ingreso:empty::after,
+#reportes-flujo-table td.monto-egreso:empty::after,
+#reportes-flujo-table td.monto-efectivo:empty::after,
+#reportes-flujo-table td.monto-banco:empty::after {
+   content: '-';
+   color: var(--gris-plateado);
+   font-weight: 400;
+}
+
+/* Columna de Referencia (Letra C, E, O, P) */
+.col-ref {
+    text-align: center;
+    font-weight: bold;
+    color: var(--marron-oscuro);
+    width: 50px;
+}
+
+/* =======================================================
+   NUEVO: COLORES DE FILAS (SOLICITUD ACTUAL)
+   ======================================================= */
+
+/* 1. Ingresos en Efectivo -> Verde */
+tr.row-ingreso-efectivo { background-color: #77dd77; }
+
+/* 2. Ingresos en Banco -> Azul */
+tr.row-ingreso-banco { background-color: #84b6f4; }
+
+/* 3. Egresos en Banco -> Amarillo */
+tr.row-egreso-banco { background-color: #fdfd96; }
+
+/* 4. Egresos en Efectivo -> Rojo */
+tr.row-egreso-efectivo { background-color: #ed5c53; }
+
+
+/* =========================================
+   RESPONSIVE (MÓVILES)
+   ========================================= */
+@media (max-width: 768px) {
+    /* Filtros uno debajo del otro */
+    .filters-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filters-container .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .form-group input, .form-group select {
+        font-size: 16px; /* Evita zoom automático en iPhone al escribir */
+    }
+}
+
+
+#historial-abonos-modal .table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    background: #fff;
+    margin-top: 15px;
+}
+
+/* Evitamos que la tabla se aplaste en móviles */
+#historial-abonos-modal table {
+    width: 100%;
+    min-width: 400px; /* Fuerza a que la tabla mantenga un ancho decente */
+    border-collapse: collapse;
+}
+
+/* En teléfonos muy pequeños, ajustamos los paddings para ganar espacio */
+@media (max-width: 480px) {
+    #historial-abonos-modal .modal-content {
+        padding: 15px;
+        width: 98%;
+    }
+    
+    #historial-abonos-modal table th, 
+    #historial-abonos-modal table td {
+        padding: 8px 10px; /* Menos espacio interior en móvil */
+        font-size: 0.9em; /* Letra ligeramente más pequeña */
+    }
+    
+    /* El bloque resumen (Total Deuda / Abonado / Pendiente) lo apilamos */
+    #historial-abonos-modal > div > div[style*="display: flex"] {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Reducimos el tamaño de los botones de acción dentro de las tablas */
+    #historial-abonos-modal .btn-sm {
+        padding: 8px 12px !important; /* Mitad del tamaño original */
+        font-size: 0.85em !important;
+        width: auto !important; /* Evita que se estiren al 100% de ancho */
+        min-width: 40px;
+        height: 35px;
+        display: inline-flex;
+        margin: 2px;
+    }
+
+    /* Ajustamos el tamaño del icono dentro del botón */
+    #historial-abonos-modal .btn-sm i {
+        font-size: 1em;
+        margin: 0; /* Quitamos margen para centrar solo el icono */
+    }
+
+    /* Contenedor de acciones en la tabla para que no se amontonen */
+    #historial-abonos-modal td:last-child {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        white-space: nowrap;
+    }
+}

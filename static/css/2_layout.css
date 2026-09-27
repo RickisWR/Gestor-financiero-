@@ -1,0 +1,128 @@
+.app-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+    position: relative; /* Necesario para posicionar elementos absolutos en móvil */
+}
+
+/* ----- Barra Lateral (Sidebar) ----- */
+.sidebar {
+    width: 260px;
+    background-color: var(--marron-oscuro);
+    color: var(--blanco-texto);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    transition: all 0.3s ease-in-out;
+    z-index: 1000; /* Asegura que esté por encima del contenido en móvil */
+}
+
+.sidebar.collapsed { width: 80px; }
+.sidebar.collapsed .sidebar-header h2,
+.sidebar.collapsed .sidebar-nav span { display: none; }
+.sidebar.collapsed .sidebar-nav a { justify-content: center; }
+
+.sidebar-header h2 { text-align: center; margin-bottom: 30px; color: var(--amarillo-calido); }
+.sidebar-nav ul { list-style: none; }
+.sidebar-nav li { margin-bottom: 15px; }
+.sidebar-nav a {
+    color: var(--gris-plateado); text-decoration: none; display: flex;
+    align-items: center; padding: 12px 15px; border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+    overflow: hidden; white-space: nowrap;
+}
+.sidebar-nav a i {
+    margin-right: 15px; width: 20px; text-align: center;
+    font-size: 1.2em; transition: margin 0.3s ease-in-out;
+}
+.sidebar.collapsed .sidebar-nav a i { margin-right: 0; }
+.sidebar-nav a:hover, .sidebar-nav li.active a {
+    background-color: var(--naranja-quemado);
+    color: var(--blanco-texto);
+}
+
+/* ----- Contenido Principal ----- */
+.main-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    transition: margin-left 0.3s ease-in-out;
+    width: 100%; /* Asegura ancho completo */
+}
+
+/* ----- Encabezado ----- */
+.header {
+    background-color: var(--crema-suave);
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--gris-plateado);
+    position: sticky; top: 0; z-index: 900; /* Header fijo al hacer scroll */
+}
+#menu-toggle {
+    font-size: 1.5em; cursor: pointer; color: var(--marron-oscuro);
+    background: none; border: none; margin-right: 20px;
+}
+.header-left { display: flex; align-items: center; }
+.header-title h1 { margin: 0; font-size: 2em; color: var(--marron-oscuro); }
+.header-title p { color: var(--gris-plateado); font-size: 1em; }
+.header-logo { max-width: 150px; }
+.header-logo img { max-width: 100%; height: auto; }
+
+/* ----- Área de Contenido General ----- */
+.content-area {
+    padding: 40px;
+}
+
+/* =========================================
+   RESPONSIVE (MÓVILES Y TABLETS)
+   ========================================= */
+@media (max-width: 768px) {
+    /* Sidebar: Se convierte en un menú "Off-canvas" (oculto a la izquierda) */
+    .sidebar {
+        position: fixed;
+        left: -260px; /* Oculto por defecto */
+        height: 100%;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+    }
+    
+    /* Cuando NO tiene la clase 'collapsed' (botón presionado), se muestra */
+    /* Nota: Invertimos la lógica visual para móvil. 'Collapsed' será oculto. */
+    .sidebar.collapsed {
+        left: -260px; /* Sigue oculto */
+    }
+    
+    /* Necesitaremos ajustar JS levemente o usar CSS para mostrarlo al togglear.
+       Para simplificar: Haremos que al presionar el botón, si quita 'collapsed',
+       el menú aparezca. */
+    .sidebar:not(.collapsed) {
+        left: 0; /* Aparece */
+        width: 260px; /* Ancho completo */
+    }
+    
+    /* Ajustes del Header */
+    .header {
+        padding: 15px 20px;
+        flex-direction: column; /* Elementos uno debajo del otro si no caben */
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .header-left {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .header-title h1 { font-size: 1.5em; }
+    .header-title p { display: none; /* Ocultar descripción en móvil para ahorrar espacio */ }
+    
+    .header-logo {
+        display: none; /* Ocultar logo grande en header móvil, o hacerlo muy pequeño */
+    }
+
+    .content-area {
+        padding: 15px; /* Menos relleno */
+    }
+}

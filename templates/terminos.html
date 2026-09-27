@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos de Uso - Gestor Financiero</title>
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/1_base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/2_layout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/3_components.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/5_pages.css') }}">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        .legal-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            line-height: 1.6;
+        }
+        .legal-header {
+            text-align: center;
+            border-bottom: 2px solid var(--naranja-principal);
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+        .legal-section {
+            margin-bottom: 25px;
+        }
+        .legal-section h2 {
+            color: var(--marron-oscuro);
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--naranja-quemado);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body style="background-color: #f4f1ea;"> <div class="legal-container">
+        <div class="legal-header">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="height: 60px; margin-bottom: 15px;">
+            <h1>Términos de Uso</h1>
+            <p>Sistema Operativo y Financiero "Puente Viejo"</p>
+        </div>
+
+        <div class="legal-section">
+            <h2><i class="fas fa-briefcase"></i> 1. Uso Exclusivo y Laboral</h2>
+            <p>Este sistema es una herramienta de trabajo privada desarrollada para el uso exclusivo del personal activo y autorizado de <strong>Restaurante Puente Viejo</strong>. Queda estrictamente prohibido el uso de la plataforma para fines personales, comerciales externos o cualquier actividad ajena a la operación del negocio.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2><i class="fas fa-user-shield"></i> 2. Responsabilidad de la Cuenta</h2>
+            <p>Su cuenta de acceso es personal e intransferible. El usuario se compromete a mantener la confidencialidad de su contraseña. <strong>Importante:</strong> Cualquier registro, modificación o eliminación de datos realizada bajo su usuario quedará grabada en el historial de auditoría del sistema.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2><i class="fas fa-file-invoice-dollar"></i> 3. Integridad de la Información</h2>
+            <p>El usuario tiene la obligación de ingresar información veraz y precisa en los módulos de ingresos, egresos, cuentas por pagar, inventarios y reservaciones. La alteración maliciosa o manipulación de datos financieros se considera una falta grave a las políticas de la empresa.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2><i class="fas fa-copyright"></i> 4. Propiedad Intelectual</h2>
+            <p>El diseño, código fuente, estructura de base de datos y logotipos de este software son propiedad intelectual del desarrollador original. Se prohíbe la copia, extracción de código o distribución de este software sin autorización expresa.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2><i class="fas fa-sign-out-alt"></i> 5. Cierre de Sesión Seguro</h2>
+            <p>Para proteger la información del negocio, es obligatorio cerrar sesión al finalizar su turno o al retirarse del equipo de cómputo. El descuido en este punto es responsabilidad directa del usuario asignado.</p>
+        </div>
+
+        <center>
+            <a href="{{ url_for('login') }}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Volver al Inicio de Sesión
+            </a>
+        </center>
+    </div>
+
+</body>
+</html>

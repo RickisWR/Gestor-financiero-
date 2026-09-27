@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo en Desarrollo - Puente Viejo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login_style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .construction-panel {
+            background-color: rgba(245, 240, 230, 0.95);
+            padding: 50px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            border: 1px solid rgba(74, 47, 34, 0.2);
+        }
+        .icon-build { font-size: 4rem; color: #E67A2E; margin-bottom: 20px; }
+        .role-badge { 
+            background: #4A2F22; color: #fff; padding: 5px 15px; 
+            border-radius: 20px; font-size: 0.9rem; text-transform: uppercase;
+            display: inline-block; margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel-background">
+        <div class="carousel-slide active" style="background-image: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070');"></div>
+    </div>
+    <div class="overlay"></div>
+
+    <div class="main-container" style="justify-content: center;">
+        <div class="construction-panel">
+            <i class="fas fa-hard-hat icon-build"></i>
+            <h2>¡Hola, {{ user.nombre }}!</h2>
+            <span class="role-badge">{{ user.rol }}</span>
+            
+            <p style="font-size: 1.1rem; color: #555; margin-bottom: 30px; line-height: 1.6;">
+                El módulo de <strong>{{ user.rol|upper }}</strong> está actualmente en fase de desarrollo. 
+                <br>Pronto podrás acceder a tus funciones operativas aquí.
+            </p>
+
+            <a href="{{ url_for('logout') }}" class="btn-login" style="text-decoration: none; display: inline-block;">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </a>
+        </div>
+    </div>
+</body>
+</html>

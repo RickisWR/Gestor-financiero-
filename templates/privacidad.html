@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviso de Privacidad - Gestor Financiero</title>
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/1_base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/2_layout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/3_components.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/5_pages.css') }}">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        .legal-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            line-height: 1.6;
+        }
+        .legal-header {
+            text-align: center;
+            border-bottom: 2px solid var(--naranja-principal, #e67e22);
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+        .legal-section {
+            margin-bottom: 25px;
+        }
+        .legal-section h2 {
+            color: var(--marron-oscuro, #4a3b32);
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--naranja-quemado, #d35400);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        ul.privacy-list {
+            margin-left: 20px;
+            list-style-type: square;
+            color: #333;
+        }
+        ul.privacy-list li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body style="background-color: #f4f1ea;"> <div class="legal-container">
+        <div class="legal-header">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="height: 60px; margin-bottom: 15px;">
+            <h1>Aviso de Privacidad</h1>
+            <p>Gestor Financiero e Inventario "Puente Viejo"</p>
+        </div>
+
+        <div class="legal-section">
+            <h2><i class="fas fa-clipboard-list"></i> 1. Información que recopilamos</h2>
+            <p>Para otorgar acceso al sistema, recopilamos únicamente los datos necesarios para su funcionamiento operativo y de seguridad:</p>
+            <ul class="privacy-list">
+                <li>Nombre completo.</li>
+                <li>Nombre de usuario (Login).</li>
+                <li>Rol asignado dentro de la empresa.</li>
+                <li>Un registro de las acciones y movimientos financieros u operativos realizados dentro del sistema (auditoría de sistema).</li>
+            </ul>
+        </div>
+
+        <div class="legal-section">
+            <h2><i class="fas fa-users-cog"></i> 2. Uso de la información</h2>
+            <p>Los datos recopilados son de uso estrictamente interno para la administración del restaurante y se utilizan para:</p>
+            <ul class="privacy-list">
+                <li>Autenticar su identidad al iniciar sesión.</li>
+                <li>Asignar los permisos correspondientes a su rol laboral.</li>
+                <li>Mantener un historial transparente sobre quién registra, modifica o elimina movimientos financieros o de inventario.</li>
+            </ul>
+        </div>
+
+        <div class="legal-section">
+            <h2><i class="fas fa-lock"></i> 3. Protección y Seguridad</h2>
+            <p>Sus credenciales de acceso (contraseñas) son almacenadas mediante algoritmos de encriptación irreversible de alta seguridad. Ni los administradores ni el desarrollador del sistema pueden ver su contraseña en texto plano.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2><i class="fas fa-cookie-bite"></i> 4. Uso de Cookies</h2>
+            <p>Este sistema utiliza "cookies de sesión" técnicas que son estrictamente necesarias para mantener su sesión abierta de forma segura mientras navega por las páginas del gestor. No utilizamos cookies para rastreo publicitario ni compartimos su información con terceros.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2><i class="fas fa-user-edit"></i> 5. Derechos del Usuario</h2>
+            <p>Cualquier usuario puede solicitar la actualización o corrección de su nombre personal y contraseña directamente desde la sección "Configurar Usuario" dentro de su panel de control en el sistema.</p>
+        </div>
+
+        <center>
+            <a href="{{ url_for('login') }}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Volver al Inicio de Sesión
+            </a>
+        </center>
+    </div>
+
+</body>
+</html>

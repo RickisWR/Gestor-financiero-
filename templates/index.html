@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor Financiero - Principal</title>
+    
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/1_base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/2_layout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/3_components.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/4_forms_tables.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/5_pages.css') }}">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Menú Principal</h2>
+            </div>
+           <nav class="sidebar-nav">
+    <ul>
+        <!-- 1. Enlace de Gestión de Usuarios (SOLO ADMIN Y JEFE) -->
+        {% if current_user.rol in ['admin', 'jefe'] %}
+        <li>
+            <a href="{{ url_for('usuarios_page') }}" class="{{ 'active' if request.path == '/usuarios' else '' }}">
+                <i class="fas fa-users-cog"></i><span>Usuarios</span>
+            </a>
+        </li>
+        {% endif %}
+        
+        <!-- 2. Enlaces del Sistema Financiero (TODOS MENOS ADMIN) -->
+        {% if current_user.rol != 'admin' %}
+        <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i><span>Inicio</span></a></li>
+        <li><a href="{{ url_for('registro') }}"><i class="fas fa-exchange-alt"></i><span>Registro</span></a></li>
+        <li><a href="{{ url_for('reportes') }}"><i class="fas fa-chart-bar"></i><span>Reportes</span></a></li>
+        <li><a href="{{ url_for('cuentas') }}"><i class="fas fa-file-invoice-dollar"></i><span>Cuentas</span></a></li>
+        {% endif %}
+    </ul>
+</nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button id="menu-toggle"><i class="fas fa-bars"></i></button>
+                    <div class="header-title">
+                        <h1>Panel de Control</h1>
+                        <p>Bienvenido. Aquí tienes un resumen de tu actividad financiera.</p>
+                    </div>
+                </div>
+                
+                <!-- SECCIÓN DERECHA: LOGO + MENÚ DE USUARIO (NUEVO) -->
+                <div class="user-menu-container">
+                    <div class="user-trigger" onclick="toggleUserMenu()">
+                        <div class="header-logo">
+                            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo de la Franquicia">
+                        </div>
+                        <!-- Muestra el nombre del usuario actual -->
+                        <span style="margin-left:10px; font-weight:bold; color:var(--marron-oscuro); cursor: pointer;">
+                            {{ current_user.nombre if current_user.is_authenticated else 'Usuario' }} 
+                            <i class="fas fa-caret-down"></i>
+                        </span>
+                    </div>
+                    <div id="user-dropdown" class="user-dropdown-content">
+                        <a href="{{ url_for('perfil') }}"><i class="fas fa-user-cog"></i> Configurar Usuario</a>
+                        <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </header>
+
+            <section class="content-area">
+                <h2>Resumen General</h2>
+                
+                <div class="cards-container">
+                    <div class="card">
+                        <h3>Ingresos Totales</h3>
+                        <p id="total-ingresos" class="positive-feedback">$0.00</p>
+                        <div id="mensaje-tendencia" class="trend-message">
+                            <i class="fas fa-chart-line"></i> Calculando...
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Egresos Totales</h3>
+                        <p id="total-egresos" class="negative-feedback">$0.00</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Total Acumulado</h3>
+                        <p id="total-acumulado">$0.00</p>
+                        <small class="text-muted">Balance General</small>
+                    </div>
+                </div>
+
+                <!-- === SECCIÓN DE GRÁFICAS === -->
+                <div class="charts-wrapper">
+                    <!-- Gráfica 1: Pastel -->
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-pie"></i> Distribución de Gastos</h3>
+                        <div class="chart-container">
+                            <canvas id="gastosChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Gráfica 2: Barras -->
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-area"></i> Flujo Mensual</h3>
+                        <div class="chart-container">
+                            <canvas id="balanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="upcoming-deadlines-container" style="margin-bottom: 40px;">
+                    <h3 style="color: var(--marron-oscuro); margin-bottom: 15px;">
+                        <i class="fas fa-calendar-alt"></i> Próximos Vencimientos (Cuentas por Pagar)
+                    </h3>
+                    <div class="card" style="max-width: 100%; padding: 0;">
+                        <ul id="lista-vencimientos" style="list-style: none; margin: 0; padding: 0;">
+                            <li style="padding: 20px; color: #7f8c8d;">Cargando vencimientos...</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="main-actions">
+                     <a href="{{ url_for('registro') }}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> Agregar Movimiento
+                    </a>
+                    <a href="{{ url_for('reportes') }}" class="btn btn-secondary">
+                        <i class="fas fa-search"></i> Consultar Reporte
+                    </a>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='menu.js') }}"></script>
+    
+    <!-- LIBRERÍA CHART.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>
