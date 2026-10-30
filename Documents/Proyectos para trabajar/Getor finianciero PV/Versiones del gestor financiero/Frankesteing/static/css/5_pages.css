@@ -1,0 +1,81 @@
+/* ----- Página: registro_movimientos.html ----- */
+.form-container-centered { 
+    max-width: 800px; margin: 40px auto; background-color: var(--crema-suave); 
+    padding: 40px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+    border-top: 5px solid var(--naranja-quemado); 
+}
+.form-container-centered h3 { 
+    text-align: center; margin-bottom: 30px; font-size: 1.8em; color: var(--marron-oscuro); 
+}
+.form-container-centered h3 i { margin-right: 10px; color: var(--naranja-quemado); }
+
+/* Grid de 2 columnas para escritorio */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+
+/* ----- Página: detalles-modal ----- */
+.detalles-grid { 
+    display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; 
+}
+.detalles-grid p { 
+    background-color: var(--beige-claro); padding: 10px; border-radius: 5px; 
+    border-left: 4px solid var(--gris-plateado); 
+    word-break: break-word; 
+}
+.detalles-grid p strong { color: var(--marron-oscuro); }
+
+/* ----- Estilos para el Dashboard (index.html) ----- */
+.trend-message {
+    margin-top: 10px; font-size: 0.9em; padding: 8px; border-radius: 6px;
+    background-color: #f8f9fa; color: var(--marron-oscuro);
+    border-left: 4px solid transparent; line-height: 1.4;
+}
+.trend-message.trend-up { background-color: #e8f5e9; color: #2e7d32; border-left-color: #2e7d32; }
+.trend-message.trend-down { background-color: #ffebee; color: #c62828; border-left-color: #c62828; }
+.trend-message.trend-neutral { background-color: #e3f2fd; color: #1565c0; border-left-color: #1565c0; }
+.trend-message strong { font-weight: bold; text-decoration: underline; }
+.text-muted { color: var(--gris-plateado); font-size: 0.8em; display: block; margin-top: 5px; }
+
+/* === NUEVO: SECCIÓN DE GRÁFICAS === */
+.charts-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas */
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.chart-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.chart-card h3 {
+    color: var(--marron-oscuro);
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    text-align: center;
+    border-bottom: 2px solid var(--beige-claro);
+    padding-bottom: 10px;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px; /* Altura fija para que no se deforme */
+    width: 100%;
+}
+
+/* =========================================
+   RESPONSIVE (MÓVILES)
+   ========================================= */
+@media (max-width: 768px) {
+    .form-row { grid-template-columns: 1fr; gap: 10px; }
+    .form-container-centered { padding: 20px; margin: 10px; }
+    .detalles-grid { grid-template-columns: 1fr; }
+    
+    /* Gráficas una debajo de la otra en móvil */
+    .charts-wrapper { grid-template-columns: 1fr; }
+    .chart-container { height: 250px; }
+}
+@media (min-width: 768px) { .detalles-grid { grid-template-columns: 1fr 1fr; } }
