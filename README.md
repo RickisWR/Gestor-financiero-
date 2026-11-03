@@ -5,3 +5,11 @@ Base de Datos: Incluye un esquema relacional de base de datos (schema.sql) que s
 Infraestructura de Despliegue: La configuración del proyecto utiliza wrangler.jsonc, lo que indica que la API está diseñada y optimizada para ejecutarse en la nube a través del servicio Cloudflare Workers (Edge Computing).   
 Control de Versiones: Utiliza Git y GitHub para mantener el registro de los cambios y proteger el código fuente en la rama main.   Enlace de la Página Web (Repositorio)
 https://gestor-financiero-pv.pages.dev/templates/login
+
+Las credenciales son 
+Usuario:pruebas
+contraseña:pruebas123
+
+Usuario:admin
+contraseña:admin123
+
